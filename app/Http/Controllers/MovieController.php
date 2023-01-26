@@ -20,9 +20,6 @@ class MovieController extends Controller
         $nowPlaying = Http::get('https://api.themoviedb.org/3/movie/now_playing?api_key='.env('TMDB_TOKEN'))
             ->json()['results'];
 
-        $nowPlayingDate = Http::get('https://api.themoviedb.org/3/movie/now_playing?api_key='.env('TMDB_TOKEN'))
-            ->json()['dates'];
-
         $genresArray = Http::get('https://api.themoviedb.org/3/genre/movie/list?api_key='.env('TMDB_TOKEN'))
             ->json()['genres'];
 
@@ -30,7 +27,6 @@ class MovieController extends Controller
             return [$genre['id'] => $genre['name']];
         });
 
-        dump($nowPlayingDate);
         return view('index' , compact('popularMovies','nowPlaying', 'genres'));
     }
 
@@ -63,7 +59,9 @@ class MovieController extends Controller
      */
     public function show($id)
     {
-        return view('show');
+        $movie = Http::get('https://api.themoviedb.org/3/movie/'.$id.'?api_key='.env('TMDB_TOKEN').'&append_to_response=credits,videos,images')
+            ->json();
+        return view('show' , compact('movie'));
     }
 
     /**
