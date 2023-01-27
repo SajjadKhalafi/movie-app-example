@@ -9,6 +9,8 @@
         </svg>
     </div>
 
+    <div wire:loading class="spinner top-0 right-0 mr-4 mt-3"></div>
+
     @if(strlen($search) >= 2)
         <div class="absolute bg-gray-800 text-sm rounded w-64 mt-4">
             @if($searchResults->count() > 0)
@@ -18,7 +20,8 @@
                             <a href="{{ route('movies.show' , $result['id']) }}"
                                class="block hover:bg-gray-700 px-3 py-3 flex items-center">
                                 @if($result['poster_path'])
-                                    <img src="https://image.tmdb.org/t/p/w92/{{ $result['poster_path'] }}" alt="Poster" class="w-8">
+                                    <img src="https://image.tmdb.org/t/p/w92/{{ $result['poster_path'] }}" alt="Poster"
+                                         class="w-8">
                                 @else
                                     <img src="{{ asset('img/no-poster.png') }}" alt="Poster" class="w-8">
                                 @endif
