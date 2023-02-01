@@ -2,32 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\ViewModels\MoviesViewModel;
-use App\ViewModels\MovieViewModel;
+use App\ViewModels\ActorsViewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class MovieController extends Controller
+class ActorsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($page = 1)
     {
-        $popularMovies = Http::get('https://api.themoviedb.org/3/movie/popular?api_key='.env('TMDB_TOKEN'))
+        $popularActors = Http::get('https://api.themoviedb.org/3/person/popular?api_key=' . env('TMDB_TOKEN') . '&page=' . $page)
             ->json()['results'];
+        $viewModel = new ActorsViewModel($popularActors, $page);
 
-        $nowPlaying = Http::get('https://api.themoviedb.org/3/movie/now_playing?api_key='.env('TMDB_TOKEN'))
-            ->json()['results'];
-
-        $genres = Http::get('https://api.themoviedb.org/3/genre/movie/list?api_key='.env('TMDB_TOKEN'))
-            ->json()['genres'];
-
-        $viewModel = new MoviesViewModel($popularMovies, $nowPlaying, $genres);
-
-        return view('movies.index' , $viewModel);
+        return view('actors.index', $viewModel);
     }
 
     /**
@@ -43,7 +35,7 @@ class MovieController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -54,22 +46,18 @@ class MovieController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $movie = Http::get('https://api.themoviedb.org/3/movie/'.$id.'?api_key='.env('TMDB_TOKEN').'&append_to_response=credits,videos,images')
-            ->json();
-
-        $viewModel = new MovieViewModel($movie);
-        return view('movies.show' , $viewModel);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -80,8 +68,8 @@ class MovieController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -92,7 +80,7 @@ class MovieController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
