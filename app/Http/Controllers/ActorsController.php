@@ -15,6 +15,8 @@ class ActorsController extends Controller
      */
     public function index($page = 1)
     {
+        abort_if($page > 500 , 204);
+
         $popularActors = Http::get('https://api.themoviedb.org/3/person/popular?api_key=' . env('TMDB_TOKEN') . '&page=' . $page)
             ->json()['results'];
         $viewModel = new ActorsViewModel($popularActors, $page);
