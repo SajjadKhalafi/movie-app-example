@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ViewModels\ActorsViewModel;
+use App\ViewModels\ActorViewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -53,7 +54,17 @@ class ActorsController extends Controller
      */
     public function show($id)
     {
-        //
+        $actor = Http::get('https://api.themoviedb.org/3/person/' . $id .'?api_key=' . env('TMDB_TOKEN'))
+            ->json();
+
+        $credits = Http::get('https://api.themoviedb.org/3/person/' . $id .'/combined_credits?api_key=' . env('TMDB_TOKEN'))
+            ->json();
+
+        $social = Http::get('https://api.themoviedb.org/3/person/' . $id .'/external_ids?api_key=' . env('TMDB_TOKEN'))
+            ->json();
+
+        $viewModel = new ActorViewModel($actor, $social , $credits);
+        return view('actors.show' , $viewModel);
     }
 
     /**
