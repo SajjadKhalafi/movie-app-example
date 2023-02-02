@@ -14,18 +14,17 @@ class MovieController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($page = 1)
     {
-        $popularMovies = Http::get('https://api.themoviedb.org/3/movie/popular?api_key='.env('TMDB_TOKEN'))
-            ->json()['results'];
+//        abort_if($page > 500 , 204);
 
-        $nowPlaying = Http::get('https://api.themoviedb.org/3/movie/now_playing?api_key='.env('TMDB_TOKEN'))
-            ->json()['results'];
+        $popularMovies = Http::get('https://api.themoviedb.org/3/movie/popular?api_key='.env('TMDB_TOKEN') . '&page=' . $page)
+            ->json();
 
         $genres = Http::get('https://api.themoviedb.org/3/genre/movie/list?api_key='.env('TMDB_TOKEN'))
             ->json()['genres'];
 
-        $viewModel = new MoviesViewModel($popularMovies, $nowPlaying, $genres);
+        $viewModel = new MoviesViewModel($popularMovies, $genres , $page);
 
         return view('movies.index' , $viewModel);
     }
@@ -98,5 +97,44 @@ class MovieController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function nowPlaying($page = 1)
+    {
+        $nowPlaying = Http::get('https://api.themoviedb.org/3/movie/now_playing?api_key='.env('TMDB_TOKEN') . '&page=' . $page)
+            ->json();
+
+        $genres = Http::get('https://api.themoviedb.org/3/genre/movie/list?api_key='.env('TMDB_TOKEN'))
+            ->json()['genres'];
+
+        $viewModel = new MoviesViewModel($nowPlaying, $genres , $page);
+
+        return view('movies.now-playing' , $viewModel);
+    }
+
+    public function upcoming($page = 1)
+    {
+        $upcoming = Http::get('https://api.themoviedb.org/3/movie/upcoming?api_key='.env('TMDB_TOKEN') . '&page=' . $page)
+            ->json();
+
+        $genres = Http::get('https://api.themoviedb.org/3/genre/movie/list?api_key='.env('TMDB_TOKEN'))
+            ->json()['genres'];
+
+        $viewModel = new MoviesViewModel($upcoming, $genres , $page);
+
+        return view('movies.upcoming' , $viewModel);
+    }
+
+    public function topRated($page = 1)
+    {
+        $topRated = Http::get('https://api.themoviedb.org/3/movie/top_rated?api_key='.env('TMDB_TOKEN') . '&page=' . $page)
+            ->json();
+
+        $genres = Http::get('https://api.themoviedb.org/3/genre/movie/list?api_key='.env('TMDB_TOKEN'))
+            ->json()['genres'];
+
+        $viewModel = new MoviesViewModel($topRated, $genres , $page);
+
+        return view('movies.top-rated' , $viewModel);
     }
 }

@@ -1,4 +1,4 @@
-<div class="mt-8">
+<div class="movie mt-8">
     <a href="{{ route('movies.show' , $movie['id']) }}">
         <img src="{{ $movie['poster_path'] }}" alt="Poster"
              class="hover:opacity-75 transition ease-in-out duration-150">

@@ -7,25 +7,15 @@ use Spatie\ViewModels\ViewModel;
 
 class MoviesViewModel extends ViewModel
 {
-    public $popularMovies;
-    public $nowPlayingMovies;
+    public $movies;
     public $genres;
+    public $page;
 
-    public function __construct($popularMovies, $nowPlayingMovies, $genres)
+    public function __construct($movies, $genres , $page)
     {
-        $this->popularMovies = $popularMovies;
-        $this->nowPlayingMovies = $nowPlayingMovies;
+        $this->movies = $movies;
         $this->genres = $genres;
-    }
-
-    public function popularMovies()
-    {
-        return $this->formatMovies($this->popularMovies);
-    }
-
-    public function nowPlaying()
-    {
-        return $this->formatMovies($this->nowPlayingMovies);
+        $this->page = $page;
     }
 
     public function genres()
@@ -35,15 +25,23 @@ class MoviesViewModel extends ViewModel
         });
     }
 
-    private function formatMovies($movies)
+    public function movies()
     {
-        return collect($movies)->map(function ($movie) {
+        if (request()->is('top-rated')){
+            $sort = 'vote_average';
+        }else{
+            $sort = 'popularity';
+        }
+        return collect($this->movies['results'])->sortByDesc($sort)->map(function ($movie) {
             $genresFormatted = collect($movie['genre_ids'])->mapWithKeys(function ($value) {
                 return [$value => $this->genres()->get($value)];
             })->implode(', ');
 
             return collect($movie)->merge([
-                'poster_path' => 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'],
+                'title' => $movie['title'] ?? 'Untitled',
+                'poster_path' => isset($movie['poster_path'])
+                    ? 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path']
+                    : 'https://ui-avatars.com/api/?size=235&name=' . $movie['title'],
                 'vote_average' => $movie['vote_average'] * 10 . '%',
                 'release_date' => Carbon::parse($movie['release_date'])->format('M d, Y'),
                 'genres' => $genresFormatted,
