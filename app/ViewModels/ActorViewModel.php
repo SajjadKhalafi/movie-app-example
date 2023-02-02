@@ -42,14 +42,14 @@ class ActorViewModel extends ViewModel
     {
         $castMovies = collect($this->credits)->get('cast');
         return collect($castMovies)->where('media_type', 'movie')
-            ->sortByDesc('popularity')
+            ->sortByDesc('vote_average')
             ->take(5)
             ->map(function ($movie) {
                 return collect($movie)->merge([
                     'poster_path' => 'https://image.tmdb.org/t/p/w150_and_h225_bestv2/' . $movie['poster_path'],
                     'title' => $movie['title'] ?? 'Untitled',
-                ])->only(['poster_path' , 'id' , 'title' , 'media_type' , 'popularity']);
-        })->dump();
+                ])->only(['poster_path' , 'id' , 'title' , 'media_type']);
+        });
     }
 
     public function credits()
