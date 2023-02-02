@@ -47,8 +47,6 @@ class TvViewModel extends ViewModel
                 'vote_average' => $tvShow['vote_average'] * 10 . '%',
                 'first_air_date' => Carbon::parse($tvShow['first_air_date'])->format('M d, Y'),
                 'genres' => $genresFormatted,
-            ])->only([
-                'poster_path', 'vote_average', 'first_air_date', 'genres', 'id', 'genre_ids', 'name',
             ]);
         });
     }
