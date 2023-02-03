@@ -4,7 +4,7 @@
     <div class="container mx-auto px-4 pt-16">
         <div class="popular-tv">
             <h2 class="uppercase tracking-wider text-orange-500 text-lg font-semibold">
-                Popular TV Shows
+                Airing Today TV Shows
             </h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
                 @foreach($tvShows as $tvshow)
@@ -30,7 +30,7 @@
         let elem = document.querySelector('.grid');
         let infScroll = new InfiniteScroll(elem, {
             // options
-            path: '/tv/page/@{{#}}',
+            path: '/tv-top-rated/page/@{{#}}',
             append: '.tv',
             history: false,
             status: '.page-load-status',

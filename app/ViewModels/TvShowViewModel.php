@@ -37,6 +37,6 @@ class TvShowViewModel extends ViewModel
                 ]);
             }),
             'backdrops' => collect($this->tvshow['images']['backdrops'])->take(9),
-        ])->dump();
+        ]);
     }
 }

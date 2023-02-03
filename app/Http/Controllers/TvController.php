@@ -17,15 +17,12 @@ class TvController extends Controller
     public function index()
     {
         $popularTV = Http::get('https://api.themoviedb.org/3/tv/popular?api_key='.env('TMDB_TOKEN'))
-            ->json()['results'];
-
-        $topRated = Http::get('https://api.themoviedb.org/3/tv/top_rated?api_key='.env('TMDB_TOKEN'))
-            ->json()['results'];
+            ->json();
 
         $genres = Http::get('https://api.themoviedb.org/3/genre/tv/list?api_key='.env('TMDB_TOKEN'))
-            ->json()['genres'];
+            ->json();
 
-        $viewModel = new TvViewModel($popularTV, $topRated, $genres);
+        $viewModel = new TvViewModel($popularTV, $genres);
         return view('tv.index' , $viewModel);
     }
 
@@ -97,5 +94,41 @@ class TvController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function airing_today()
+    {
+        $airingToday = Http::get('https://api.themoviedb.org/3/tv/airing_today?api_key='.env('TMDB_TOKEN'))
+            ->json();
+
+        $genres = Http::get('https://api.themoviedb.org/3/genre/tv/list?api_key='.env('TMDB_TOKEN'))
+            ->json();
+
+        $viewModel = new TvViewModel($airingToday , $genres);
+        return view('tv.airing-today' , $viewModel);
+    }
+
+    public function on_tv()
+    {
+        $onTheAir = Http::get('https://api.themoviedb.org/3/tv/on_the_air?api_key='.env('TMDB_TOKEN'))
+            ->json();
+
+        $genres = Http::get('https://api.themoviedb.org/3/genre/tv/list?api_key='.env('TMDB_TOKEN'))
+            ->json();
+
+        $viewModel = new TvViewModel($onTheAir , $genres);
+        return view('tv.on-tv' , $viewModel);
+    }
+
+    public function top_rated()
+    {
+        $topRated = Http::get('https://api.themoviedb.org/3/tv/top_rated?api_key='.env('TMDB_TOKEN'))
+            ->json();
+
+        $genres = Http::get('https://api.themoviedb.org/3/genre/tv/list?api_key='.env('TMDB_TOKEN'))
+            ->json();
+
+        $viewModel = new TvViewModel($topRated , $genres);
+        return view('tv.top-rated' , $viewModel);
     }
 }

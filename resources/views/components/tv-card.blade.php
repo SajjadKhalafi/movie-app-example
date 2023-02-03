@@ -1,4 +1,4 @@
-<div class="mt-8">
+<div class="tv mt-8">
     <a href="{{ route('tv.show' , $tvshow['id']) }}">
         <img src="{{ $tvshow['poster_path'] }}" alt="Poster"
              class="hover:opacity-75 transition ease-in-out duration-150">

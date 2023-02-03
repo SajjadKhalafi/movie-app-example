@@ -7,37 +7,31 @@ use Spatie\ViewModels\ViewModel;
 
 class TvViewModel extends ViewModel
 {
-    public $popularTV;
-    public $topRated;
+    public $shows;
     public $genres;
 
-    public function __construct($popularTV, $topRated, $genres)
+    public function __construct($shows, $genres)
     {
-        $this->popularTV = $popularTV;
-        $this->topRated = $topRated;
+        $this->shows = $shows;
         $this->genres = $genres;
-    }
-
-    public function popularTv()
-    {
-        return $this->formatTv($this->popularTV);
-    }
-
-    public function topRated()
-    {
-        return $this->formatTv($this->topRated);
     }
 
     public function genres()
     {
-        return collect($this->genres)->mapWithKeys(function ($genre) {
+        return collect($this->genres['genres'])->mapWithKeys(function ($genre) {
             return [$genre['id'] => $genre['name']];
         });
     }
 
-    private function formatTv($tv)
+    public function tvShows()
     {
-        return collect($tv)->map(function ($tvShow) {
+        if (request()->is('tv-top-rated')){
+            $sort = 'vote_average';
+        }else{
+            $sort = 'popularity';
+        }
+
+        return collect($this->shows['results'])->sortByDesc($sort)->map(function ($tvShow) {
             $genresFormatted = collect($tvShow['genre_ids'])->mapWithKeys(function ($value) {
                 return [$value => $this->genres()->get($value)];
             })->implode(', ');

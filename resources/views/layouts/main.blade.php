@@ -97,15 +97,15 @@
                             <a class="block px-4 py-2 mt-2 text-sm font-semibold rounded-lg
                              md:mt-0 text-gray-900 focus:text-gray-900 bg-gray-200 focus:bg-gray-200 focus:outline-none
                              focus:shadow-outline"
-                               href="#">Airing Today</a>
+                               href="{{ route('tv.airing') }}">Airing Today</a>
                             <a class="block px-4 py-2 mt-2 text-sm font-semibold rounded-lg
                              md:mt-0 text-gray-900 focus:text-gray-900 bg-gray-200 focus:bg-gray-200 focus:outline-none
                              focus:shadow-outline"
-                               href="#">On TV</a>
+                               href="{{ route('tv.on') }}">On TV</a>
                             <a class="block px-4 py-2 mt-2 text-sm font-semibold rounded-lg
                              md:mt-0 text-gray-900 focus:text-gray-900 bg-gray-200 focus:bg-gray-200 focus:outline-none
                              focus:shadow-outline"
-                               href="#">Top Rated</a>
+                               href="{{ route('tv.topRated') }}">Top Rated</a>
                         </div>
                     </div>
                 </div>
