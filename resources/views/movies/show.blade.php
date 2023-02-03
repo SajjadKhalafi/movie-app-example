@@ -4,13 +4,8 @@
     <div class="movie-info border-b border-gray-800">
         <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row">
             <div class="flex-none">
-                @if($movie['poster_path'])
-                    <img src="{{ $movie['poster_path'] }}" alt="poster"
-                         class="w-64 lg:w-96">
-                @else
-                    <img src="{{ asset('img/no-poster.png') }}" alt="poster"
-                         class="w-64 lg:w-96">
-                @endif
+                <img src="{{ $movie['poster_path'] }}" alt="poster"
+                     class="w-64 lg:w-96">
             </div>
             <div class="md:ml-24">
                 <h2 class="text-4xl mt-4 md:mt-0 font-semibold">
@@ -111,12 +106,13 @@
                 @foreach($movie['cast'] as $cast)
                     <div class="mt-8">
                         <a href="{{ route('actors.show' , $cast['id']) }}">
-                            <img src="https://image.tmdb.org/t/p/w500/{{ $cast['profile_path'] }}"
-                                 alt="Actor"
+                            <img src="{{ $cast['profile_path'] }}"
+                                 alt="Actor Profile"
                                  class="hover:opacity-75 transition ease-in-out duration-150">
                         </a>
                         <div class="mt-2">
-                            <a href="{{ route('actors.show' , $cast['id']) }}" class="text-lg mt-2 hover:text-gray-300">{{ $cast['name'] }}</a>
+                            <a href="{{ route('actors.show' , $cast['id']) }}"
+                               class="text-lg mt-2 hover:text-gray-300">{{ $cast['name'] }}</a>
                             <div class="text-sm text-gray-400">
                                 {{ $cast['character'] }}
                             </div>
@@ -133,7 +129,7 @@
                 @foreach($movie['backdrops'] as $image)
                     <div class="mt-8">
                         <a href="#"
-                           @click.prevent="isOpen = true , image = '{{ 'https://image.tmdb.org/t/p/original/' .$image['file_path'] }}'">
+                           @click.prevent="isOpen = true , image = 'https://image.tmdb.org/t/p/original/{{ $image['file_path'] }}'">
                             <img src="https://image.tmdb.org/t/p/w500/{{ $image['file_path'] }}" alt="Backdrop"
                                  class="hover:opacity-75 transition ease-in-out duration-150">
                         </a>

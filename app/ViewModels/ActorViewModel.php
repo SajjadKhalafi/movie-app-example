@@ -51,7 +51,9 @@ class ActorViewModel extends ViewModel
                 }
 
                 return collect($movie)->merge([
-                    'poster_path' => 'https://image.tmdb.org/t/p/w150_and_h225_bestv2/' . $movie['poster_path'],
+                    'poster_path' => $movie['poster_path']
+                        ? 'https://image.tmdb.org/t/p/w150_and_h225_bestv2/' . $movie['poster_path']
+                        : 'https://ui-avatars.com/api/?size=150&name=' . $title,
                     'title' => $title,
                     'linkToPage' => $movie['media_type'] == 'movie'
                         ? route('movies.show' , $movie['id'])

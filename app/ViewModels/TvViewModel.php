@@ -43,7 +43,9 @@ class TvViewModel extends ViewModel
             })->implode(', ');
 
             return collect($tvShow)->merge([
-                'poster_path' => 'https://image.tmdb.org/t/p/w500/' . $tvShow['poster_path'],
+                'poster_path' => isset($tvShow['poster_path'])
+                    ? 'https://image.tmdb.org/t/p/w500/' . $tvShow['poster_path']
+                    : 'https://ui-avatars.com/api/?size=235&name=' . $tvShow['name'],
                 'vote_average' => $tvShow['vote_average'] * 10 . '%',
                 'first_air_date' => Carbon::parse($tvShow['first_air_date'])->format('M d, Y'),
                 'genres' => $genresFormatted,

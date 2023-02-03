@@ -27,7 +27,15 @@ class MovieViewModel extends ViewModel
             'crew' => collect($this->movie['credits']['crew'])->where('department', 'Writing')
                 ->whereBetween('job', ['Director', 'Screenplay'])
                 ->take(4),
-            'cast' => collect($this->movie['credits']['cast'])->take(5),
+            'cast' => collect($this->movie['credits']['cast'])->take(5)->map(function ($cast){
+                return collect($cast)->merge([
+                    'profile_path' => $cast['profile_path']
+                        ? 'https://image.tmdb.org/t/p/w500/' . $cast['profile_path']
+                        : 'https://ui-avatars.com/api/?size=500&name=' . $cast['name'],
+                    'name' => $cast['name'] ?? "John Doe",
+                    'character' => $cast['character'] ?? "Self",
+                ]);
+            }),
             'backdrops' => collect($this->movie['images']['backdrops'])->take(9),
         ]);
     }

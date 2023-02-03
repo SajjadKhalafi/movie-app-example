@@ -106,7 +106,7 @@
                     @foreach($tvshow['cast'] as $cast)
                         <div class="mt-8">
                             <a href="{{ route('actors.show' , $cast['id']) }}">
-                                <img src="https://image.tmdb.org/t/p/w500/{{ $cast['profile_path'] }}"
+                                <img src="{{ $cast['profile_path'] }}"
                                      alt="Actor"
                                      class="hover:opacity-75 transition ease-in-out duration-150">
                             </a>
@@ -128,7 +128,7 @@
                     @foreach($tvshow['backdrops'] as $image)
                         <div class="mt-8">
                             <a href="#"
-                               @click.prevent="isOpen = true , image = '{{ 'https://image.tmdb.org/t/p/original/' .$image['file_path'] }}'">
+                               @click.prevent="isOpen = true , image = 'https://image.tmdb.org/t/p/original/{{ $image['file_path'] }}'">
                                 <img src="https://image.tmdb.org/t/p/w500/{{ $image['file_path'] }}" alt="Backdrop"
                                      class="hover:opacity-75 transition ease-in-out duration-150">
                             </a>
