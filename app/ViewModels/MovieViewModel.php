@@ -24,8 +24,10 @@ class MovieViewModel extends ViewModel
             'vote_average' => $this->movie['vote_average'] * 10 . '%',
             'release_date' => Carbon::parse($this->movie['release_date'])->format('M d, Y'),
             'genres' => collect($this->movie['genres'])->pluck('name')->flatten()->implode(', '),
-            'crew' => collect($this->movie['credits']['crew'])->where('department', 'Writing')
-                ->whereBetween('job', ['Director', 'Screenplay'])
+            'crew' => collect($this->movie['credits']['crew'])
+                ->whereIn('department' ,['Writing' ,'Directing'])
+                ->whereIn('job', ['Director', 'Screenplay', 'Story'])
+                ->unique('name')
                 ->take(4),
             'cast' => collect($this->movie['credits']['cast'])->take(5)->map(function ($cast){
                 return collect($cast)->merge([
