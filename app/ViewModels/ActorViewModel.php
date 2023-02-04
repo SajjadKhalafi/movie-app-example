@@ -41,7 +41,9 @@ class ActorViewModel extends ViewModel
     public function knownForMovies()
     {
         $castMovies = collect($this->credits)->get('cast');
-        return collect($castMovies)->sortByDesc('popularity')->take(5)->map(function ($movie) {
+        return collect($castMovies)
+            ->map(function ($movie) {
+
                 if (isset($movie['title'])){
                     $title = $movie['title'];
                 }elseif (isset($movie['name'])){
@@ -50,7 +52,16 @@ class ActorViewModel extends ViewModel
                     $title = "Untitled";
                 }
 
-                return collect($movie)->merge([
+                if (isset($movie['episode_count']) && $movie['episode_count'] > 8){
+                    $order = 0;
+                }elseif (isset($movie['order']) && $movie['order'] == 0){
+                    $order = 0;
+                }else{
+                    $order = 1000;
+                }
+
+                return collect($movie)
+                    ->merge([
                     'poster_path' => $movie['poster_path']
                         ? 'https://image.tmdb.org/t/p/w150_and_h225_bestv2/' . $movie['poster_path']
                         : 'https://ui-avatars.com/api/?size=150&name=' . $title,
@@ -58,8 +69,14 @@ class ActorViewModel extends ViewModel
                     'linkToPage' => $movie['media_type'] == 'movie'
                         ? route('movies.show' , $movie['id'])
                         : route('tv.show' , $movie['id']),
+                        'order' => $order,
                 ]);
-        });
+        })->sortBy([
+                ['order' , 'asc'],
+                ['episode_count' , 'desc'],
+                ['vote_count' , 'desc'],
+                ['popularity' , 'desc'],
+            ])->take(5)->dump();
     }
 
     public function credits()
