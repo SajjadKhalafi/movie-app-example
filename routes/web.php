@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActorsController;
+use App\Http\Controllers\landingController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TvController;
@@ -17,9 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/' , [landingController::class , 'index']);
 
 // movies routes
 Route::resource('/movies' , MovieController::class)->only(['index' , 'show']);
