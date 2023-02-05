@@ -28,7 +28,11 @@ class landingController extends Controller
         $theatersMovies = Http::get('https://api.themoviedb.org/3/discover/movie?primary_release_date.gte=' . date('Y-m-d', strtotime("-1 days")) . '&primary_release_date.lte=' . date('Y-m-d', strtotime("+40 days")) . '&watch_region=US&sort_by=vote_average.desc&api_key=' . env('TMDB_TOKEN'))
             ->json();
 
-        $viewModel = new landingViewModel($trendingOfDay, $trendingOfWeek, $streamingMovies, $popularTV, $rentMovies, $theatersMovies);
+        $freeMovies = Http::get('https://api.themoviedb.org/3/discover/movie/?with_watch_providers=8|9|337|350|118|384|15&watch_region=US&with_watch_monetization_types=free&sort_by=popularity.desc&api_key=' . env('TMDB_TOKEN'));
+
+        $freeTV = Http::get('https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&page=1&timezone=America%2FNew_York&include_null_first_air_dates=false&with_watch_providers=8%7C9%7C337%7C350%7C118%7C384%7C15&watch_region=US&with_watch_monetization_types=free&with_status=3&with_type=4&api_key=' . env('TMDB_TOKEN'));
+
+        $viewModel = new landingViewModel($trendingOfDay, $trendingOfWeek, $streamingMovies, $popularTV, $rentMovies, $theatersMovies , $freeMovies , $freeTV);
         return view('welcome', $viewModel);
     }
 }

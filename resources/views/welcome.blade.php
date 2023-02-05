@@ -22,13 +22,13 @@
             </div>
 
             <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 gap-6"
-                 x-show="isOpen" >
+                 x-show="isOpen">
                 <template x-for="trend in trends">
                     @include('components.trending-card')
                 </template>
             </div>
         </div>
-{{--        end of trending--}}
+        {{--        end of trending--}}
     </div>
 
     <div class="container mx-auto px-4 pt-16">
@@ -37,7 +37,7 @@
                 Latest Trailers
             </h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-{{--                                @foreach($popularActors as $actor)--}}
+                {{--                                @foreach($popularActors as $actor)--}}
                 <div class="actor mt-8">
                     <a href="#">
                         <img src="avatar.jpg" alt="Profile Image"
@@ -49,10 +49,10 @@
                         <div class="text-sm truncate text-gray-400">May 26, 2001</div>
                     </div>
                 </div>
-{{--                                @endforeach--}}
+                {{--                                @endforeach--}}
             </div>
         </div>
-{{--        end of latest trailer--}}
+        {{--        end of latest trailer--}}
     </div>
 
     <div class="container mx-auto px-4 pt-16">
@@ -78,35 +78,38 @@
             </div>
 
             <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 gap-6"
-                 x-show="isOpen" >
+                 x-show="isOpen">
                 <template x-for="trend in trends">
                     @include('components.trending-card')
                 </template>
             </div>
-{{--            end of populars--}}
+        </div>
+        {{--            end of populars--}}
     </div>
 
     <div class="container mx-auto px-4 pt-16">
-        <div class="free">
-            <h2 class="uppercase tracking-wider text-orange-500 text-lg font-semibold">
-                Free To Watch
-            </h2>
-            <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 gap-11">
-{{--                                @foreach($popularActors as $actor)--}}
-                <div class="actor mt-8">
-                    <a href="#">
-                        <img src="avatar.jpg" alt="Profile Image"
-                             class="hover:opacity-75 transition ease-in-out duration-150">
-                    </a>
-                    <div class="mt-2">
-                        <a href="#"
-                           class="text-lg hover:text-gray-300">Movie Name</a>
-                        <div class="text-sm truncate text-gray-400">May 26, 2001</div>
-                    </div>
+        <div class="free" x-data="{ isOpen: true, free: {{ $freeMovies }} }">
+            <div class="inline-flex rounded-md shadow-sm" role="group">
+                <h2 class="uppercase tracking-wider text-orange-500 text-lg font-semibold mr-8">
+                    Free To Watch
+                </h2>
+                <div class="inline-flex rounded-md shadow-sm">
+                    <x-landing-buttons @click.prevent="isOpen = true , free = {{ $freeMovies }} ">
+                        Movies
+                    </x-landing-buttons>
+                    <x-landing-buttons @click.prevent="isOpen = true , free = {{ $freeSeries }} ">
+                        TV
+                    </x-landing-buttons>
                 </div>
-{{--                                @endforeach--}}
+            </div>
+
+            <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 gap-6"
+                 x-show="isOpen">
+                <template x-for="trend in free">
+                    @include('components.trending-card')
+                </template>
             </div>
         </div>
-{{--        end of free to watch--}}
+        {{--        end of free to watch--}}
     </div>
 @endsection

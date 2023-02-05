@@ -7,9 +7,9 @@ use Spatie\ViewModels\ViewModel;
 
 class landingViewModel extends ViewModel
 {
-    public $dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater;
+    public $dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater, $freeMovie, $freeTV;
 
-    public function __construct($dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater)
+    public function __construct($dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater, $freeMovie, $freeTV)
     {
         $this->dayTrend = $dayTrend;
         $this->weekTrend = $weekTrend;
@@ -17,6 +17,8 @@ class landingViewModel extends ViewModel
         $this->popularTv = $popularTv;
         $this->rentMovie = $rentMovie;
         $this->theater = $theater;
+        $this->freeMovie = $freeMovie;
+        $this->freeTV = $freeTV;
     }
 
     public function dayTrends()
@@ -47,6 +49,16 @@ class landingViewModel extends ViewModel
     public function theaterMovies()
     {
         return $this->formatMovies($this->theater);
+    }
+
+    public function freeMovies()
+    {
+        return $this->formatMovies($this->freeMovie);
+    }
+
+    public function freeSeries()
+    {
+        return $this->formatMovies($this->freeTV);
     }
 
     private function formatMovies($movies)
