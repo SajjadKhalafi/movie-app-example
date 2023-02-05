@@ -7,13 +7,16 @@ use Spatie\ViewModels\ViewModel;
 
 class landingViewModel extends ViewModel
 {
-    public $dayTrend , $weekTrend , $popularTv;
+    public $dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater;
 
-    public function __construct($dayTrend , $weekTrend , $popularTv)
+    public function __construct($dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater)
     {
         $this->dayTrend = $dayTrend;
         $this->weekTrend = $weekTrend;
+        $this->streaming = $streaming;
         $this->popularTv = $popularTv;
+        $this->rentMovie = $rentMovie;
+        $this->theater = $theater;
     }
 
     public function dayTrends()
@@ -26,14 +29,29 @@ class landingViewModel extends ViewModel
         return $this->formatMovies($this->weekTrend);
     }
 
+    public function streamMovies()
+    {
+        return $this->formatMovies($this->streaming);
+    }
+
     public function popularTvs()
     {
         return $this->formatMovies($this->popularTv);
     }
 
+    public function rentMovies()
+    {
+        return $this->formatMovies($this->rentMovie);
+    }
+
+    public function theaterMovies()
+    {
+        return $this->formatMovies($this->theater);
+    }
+
     private function formatMovies($movies)
     {
-        return collect($movies['results'])->map(function ($trend){
+        return collect($movies['results'])->map(function ($trend) {
             return collect($trend)->merge([
                 'title' => $trend['title'] ?? $trend['name'],
                 'poster_path' => isset($trend['poster_path'])
@@ -43,9 +61,9 @@ class landingViewModel extends ViewModel
                 'release_date' => isset($trend['release_date']) ? Carbon::parse($trend['release_date'])->format('M d, Y')
                     : Carbon::parse($trend['first_air_date'])->format('M d, Y'),
                 'linkToPage' => isset($trend['first_air_date'])
-                    ? route('tv.show' , $trend['id'])
-                    : route('movies.show' , $trend['id']),
+                    ? route('tv.show', $trend['id'])
+                    : route('movies.show', $trend['id']),
             ]);
-        })->take(7);
+        })->sortByDesc('vote_average')->take(7);
     }
 }

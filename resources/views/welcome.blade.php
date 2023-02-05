@@ -51,36 +51,29 @@
                 </div>
 {{--                                @endforeach--}}
             </div>
-        </div>         end of latest trailer
+        </div>
+{{--        end of latest trailer--}}
     </div>
 
     <div class="container mx-auto px-4 pt-16">
-        <div class="popular" x-data="{ isOpen: true, trends: {{ $popularTvs }} }">
+        <div class="popular" x-data="{ isOpen: true, trends: {{ $streamMovies }} }">
             <div class="inline-flex rounded-md shadow-sm" role="group">
                 <h2 class="uppercase tracking-wider text-orange-500 text-lg font-semibold mr-8">
-                    Trending
+                    What's Popular
                 </h2>
                 <div class="inline-flex rounded-md shadow-sm">
-                    <a href="#"
-                       @click.prevent="isOpen = true , trends = {{ $dayTrends }} "
-                       class="px-4 py-2 text-sm font-medium  text-blue-700 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+                    <x-landing-buttons @click.prevent="isOpen = true , trends = {{ $streamMovies }} ">
                         Streaming
-                    </a>
-                    <a href="#"
-                       @click.prevent="isOpen = true , trends = {{ $popularTvs }} "
-                       class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+                    </x-landing-buttons>
+                    <x-landing-buttons @click.prevent="isOpen = true , trends = {{ $popularTvs }} ">
                         On TV
-                    </a>
-                    <a href="#"
-                       @click.prevent="isOpen = true , trends = {{ $weekTrends }} "
-                       class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+                    </x-landing-buttons>
+                    <x-landing-buttons @click.prevent="isOpen = true , trends = {{ $rentMovies }} ">
                         For Rent
-                    </a>
-                    <a href="#"
-                       @click.prevent="isOpen = true , trends = {{ $weekTrends }} "
-                       class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+                    </x-landing-buttons>
+                    <x-landing-buttons @click.prevent="isOpen = true , trends = {{ $theaterMovies }} ">
                         In Theaters
-                    </a>
+                    </x-landing-buttons>
                 </div>
             </div>
 
@@ -113,6 +106,7 @@
                 </div>
 {{--                                @endforeach--}}
             </div>
-        </div>         end of free to watch
+        </div>
+{{--        end of free to watch--}}
     </div>
 @endsection
