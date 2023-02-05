@@ -16,7 +16,10 @@ class landingController extends Controller
         $trendingOfWeek = Http::get('https://api.themoviedb.org/3/trending/all/week?api_key=' . env('TMDB_TOKEN'))
             ->json();
 
-        $viewModel = new landingViewModel($trendingOfDay , $trendingOfWeek);
+        $popularTV = Http::get('https://api.themoviedb.org/3/tv/popular?api_key='.env('TMDB_TOKEN'))
+            ->json();
+
+        $viewModel = new landingViewModel($trendingOfDay , $trendingOfWeek , $popularTV);
         return view('welcome' , $viewModel);
     }
 }

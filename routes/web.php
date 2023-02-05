@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/' , [landingController::class , 'index']);
+Route::get('/' , [landingController::class , 'index'])->name('landing');
 
 // movies routes
 Route::resource('/movies' , MovieController::class)->only(['index' , 'show']);

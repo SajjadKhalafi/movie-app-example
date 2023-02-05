@@ -7,27 +7,33 @@ use Spatie\ViewModels\ViewModel;
 
 class landingViewModel extends ViewModel
 {
-    public $dayTrend , $weekTrend;
+    public $dayTrend , $weekTrend , $popularTv;
 
-    public function __construct($dayTrend , $weekTrend)
+    public function __construct($dayTrend , $weekTrend , $popularTv)
     {
         $this->dayTrend = $dayTrend;
         $this->weekTrend = $weekTrend;
+        $this->popularTv = $popularTv;
     }
 
     public function dayTrends()
     {
-        return $this->trendsFormat($this->dayTrend);
+        return $this->formatMovies($this->dayTrend);
     }
 
-    public function WeekTrends()
+    public function weekTrends()
     {
-        return $this->trendsFormat($this->weekTrend);
+        return $this->formatMovies($this->weekTrend);
     }
 
-    private function trendsFormat($trends)
+    public function popularTvs()
     {
-        return collect($trends['results'])->map(function ($trend){
+        return $this->formatMovies($this->popularTv);
+    }
+
+    private function formatMovies($movies)
+    {
+        return collect($movies['results'])->map(function ($trend){
             return collect($trend)->merge([
                 'title' => $trend['title'] ?? $trend['name'],
                 'poster_path' => isset($trend['poster_path'])
@@ -36,7 +42,7 @@ class landingViewModel extends ViewModel
                 'vote_average' => number_format($trend['vote_average'] * 10) . '%',
                 'release_date' => isset($trend['release_date']) ? Carbon::parse($trend['release_date'])->format('M d, Y')
                     : Carbon::parse($trend['first_air_date'])->format('M d, Y'),
-                'linkToPage' => $trend['media_type'] == 'tv'
+                'linkToPage' => isset($trend['first_air_date'])
                     ? route('tv.show' , $trend['id'])
                     : route('movies.show' , $trend['id']),
             ]);
