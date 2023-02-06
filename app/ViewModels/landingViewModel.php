@@ -3,13 +3,14 @@
 namespace App\ViewModels;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 use Spatie\ViewModels\ViewModel;
 
 class landingViewModel extends ViewModel
 {
-    public $heroBg , $dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater, $freeMovie, $freeTV;
+    public $heroBg, $dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater, $freeMovie, $freeTV;
 
-    public function __construct($heroBg , $dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater, $freeMovie, $freeTV)
+    public function __construct($heroBg, $dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater, $freeMovie, $freeTV)
     {
         $this->heroBg = $heroBg;
         $this->dayTrend = $dayTrend;
@@ -24,11 +25,29 @@ class landingViewModel extends ViewModel
 
     public function bgImage()
     {
-        return collect($this->heroBg['results'])->map(function ($movie){
+        return collect($this->heroBg['results'])->map(function ($movie) {
             return collect($movie)->merge([
                 'poster_path' => "https://www.themoviedb.org/t/p/w1920_and_h600_multi_faces_filter(duotone,00192f,00baff)$movie[poster_path]"
             ]);
         })->random();
+    }
+
+    public function streamTrailers()
+    {
+        return collect($this->streaming['results'])->map(function ($movie) {
+//            $movieId =  collect($movie['id']);
+            return collect($movie['id'])->map(function ($id) {
+                $film = Http::get('https://api.themoviedb.org/3/movie/' . $id . '?append_to_response=videos,images&api_key=' . env('TMDB_TOKEN'))
+                    ->json();
+                return collect($film)->merge([
+                    'backdrops' => collect($film['images']['backdrops'])->take(1),
+                    'video' => collect($film['videos']['results'])
+                        ->where('type' , 'Trailer')
+                        ->sortByDesc('published_at')
+                        ->take(1)
+                ]);
+            });
+        })->take(4);
     }
 
     public function dayTrends()

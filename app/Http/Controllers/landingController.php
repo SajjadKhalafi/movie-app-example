@@ -35,7 +35,7 @@ class landingController extends Controller
 
         $freeTV = Http::get('https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&page=1&timezone=America%2FNew_York&include_null_first_air_dates=false&with_watch_providers=8%7C9%7C337%7C350%7C118%7C384%7C15&watch_region=US&with_watch_monetization_types=free&with_status=3&with_type=4&api_key=' . env('TMDB_TOKEN'));
 
-        $viewModel = new landingViewModel( $heroBg ,$trendingOfDay, $trendingOfWeek, $streamingMovies, $popularTV, $rentMovies, $theatersMovies , $freeMovies , $freeTV);
+        $viewModel = new landingViewModel( $heroBg, $trendingOfDay, $trendingOfWeek, $streamingMovies, $popularTV, $rentMovies, $theatersMovies , $freeMovies , $freeTV);
         return view('welcome', $viewModel);
     }
 }

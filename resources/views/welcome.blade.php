@@ -68,27 +68,56 @@
 
     <div class="container mx-auto px-4 pt-16">
         <div class="latest-trailers">
-            <h2 class="uppercase tracking-wider text-orange-500 text-lg font-semibold">
-                Latest Trailers
-            </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                {{--                                @foreach($popularActors as $actor)--}}
-                <div class="actor mt-8">
-                    <a href="#">
-                        <img src="avatar.jpg" alt="Profile Image"
-                             class="hover:opacity-75 transition ease-in-out duration-150">
-                    </a>
-                    <div class="mt-2">
-                        <a href="#"
-                           class="text-lg hover:text-gray-300">Movie Name</a>
-                        <div class="text-sm truncate text-gray-400">May 26, 2001</div>
-                    </div>
+            <div class="inline-flex rounded-md shadow-sm" role="group">
+                <h2 class="uppercase tracking-wider text-orange-500 text-lg font-semibold mr-8">
+                    Latest Trailers
+                </h2>
+                <div class="inline-flex rounded-md shadow-sm">
+                    <x-landing-buttons>
+                        Streaming
+                    </x-landing-buttons>
+                    <x-landing-buttons>
+                        On TV
+                    </x-landing-buttons>
+                    <x-landing-buttons>
+                        For Rent
+                    </x-landing-buttons>
+                    <x-landing-buttons>
+                        In Theaters
+                    </x-landing-buttons>
                 </div>
-                {{--                                @endforeach--}}
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                @foreach($streamTrailers as $trailer)
+                    <div class="mt-8 rounded overflow-hidden shadow-lg">
+                        <div class="relative">
+                            <img
+                                src="https://www.themoviedb.org/t/p/w355_and_h200_multi_faces/{{ $trailer[0]['backdrops'][0]['file_path'] }}"
+                                alt="poster"
+                                class="w-full h-auto transition ease-in-out duration-150">
+                            <button class="absolute top-[35%] left-[41%]">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5" stroke="currentColor" class="w-11 h-11">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="px-6 py-4 text-center">
+                            <a href="#" class="font-semibold mb-2">{{ $trailer[0]['title'] }}</a>
+                            <h3 class="text-white text-base font-normal">
+                                @foreach($trailer[0]['video'] as $video)
+                                    {{ $video['name'] }}
+                                @endforeach
+                            </h3>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
-        {{--        end of latest trailer--}}
     </div>
+    {{--        end of latest trailer--}}
 
     <div class="container mx-auto px-4 pt-16">
         <div class="popular" x-data="{ isOpen: true, trends: {{ $streamMovies }} }">
