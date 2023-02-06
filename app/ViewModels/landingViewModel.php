@@ -7,10 +7,11 @@ use Spatie\ViewModels\ViewModel;
 
 class landingViewModel extends ViewModel
 {
-    public $dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater, $freeMovie, $freeTV;
+    public $heroBg , $dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater, $freeMovie, $freeTV;
 
-    public function __construct($dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater, $freeMovie, $freeTV)
+    public function __construct($heroBg , $dayTrend, $weekTrend, $streaming, $popularTv, $rentMovie, $theater, $freeMovie, $freeTV)
     {
+        $this->heroBg = $heroBg;
         $this->dayTrend = $dayTrend;
         $this->weekTrend = $weekTrend;
         $this->streaming = $streaming;
@@ -19,6 +20,15 @@ class landingViewModel extends ViewModel
         $this->theater = $theater;
         $this->freeMovie = $freeMovie;
         $this->freeTV = $freeTV;
+    }
+
+    public function bgImage()
+    {
+        return collect($this->heroBg['results'])->map(function ($movie){
+            return collect($movie)->merge([
+                'poster_path' => "https://www.themoviedb.org/t/p/w1920_and_h600_multi_faces_filter(duotone,00192f,00baff)$movie[poster_path]"
+            ]);
+        })->random();
     }
 
     public function dayTrends()

@@ -10,6 +10,9 @@ class landingController extends Controller
 {
     public function index()
     {
+        $heroBg = Http::get('https://api.themoviedb.org/3/discover/movie?sort_by=vote_count.desc&release_date.lte=2021-12-30&vote_average.gte=7.8&vote_average.lte=9.9&with_watch_monetization_types=flatrate&language=en-US&api_key=' . env('TMDB_TOKEN'))
+            ->json();
+
         $trendingOfDay = Http::get('https://api.themoviedb.org/3/trending/all/day?api_key=' . env('TMDB_TOKEN'))
             ->json();
 
@@ -32,7 +35,7 @@ class landingController extends Controller
 
         $freeTV = Http::get('https://api.themoviedb.org/3/discover/tv?sort_by=popularity.desc&page=1&timezone=America%2FNew_York&include_null_first_air_dates=false&with_watch_providers=8%7C9%7C337%7C350%7C118%7C384%7C15&watch_region=US&with_watch_monetization_types=free&with_status=3&with_type=4&api_key=' . env('TMDB_TOKEN'));
 
-        $viewModel = new landingViewModel($trendingOfDay, $trendingOfWeek, $streamingMovies, $popularTV, $rentMovies, $theatersMovies , $freeMovies , $freeTV);
+        $viewModel = new landingViewModel( $heroBg ,$trendingOfDay, $trendingOfWeek, $streamingMovies, $popularTV, $rentMovies, $theatersMovies , $freeMovies , $freeTV);
         return view('welcome', $viewModel);
     }
 }
