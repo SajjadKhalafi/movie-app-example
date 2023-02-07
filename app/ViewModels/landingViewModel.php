@@ -47,7 +47,7 @@ class landingViewModel extends ViewModel
                         ->take(1)
                 ]);
             });
-        })->take(4);
+        })->take(20);
     }
 
     public function dayTrends()
