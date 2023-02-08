@@ -32,23 +32,6 @@ class landingViewModel extends ViewModel
         })->random();
     }
 
-    public function streamTrailers()
-    {
-        return collect($this->streaming['results'])->map(function ($movie) {
-//            $movieId =  collect($movie['id']);
-            return collect($movie['id'])->map(function ($id) {
-                $film = Http::get('https://api.themoviedb.org/3/movie/' . $id . '?append_to_response=videos,images&api_key=' . env('TMDB_TOKEN'))
-                    ->json();
-                return collect($film)->merge([
-                    'backdrops' => collect($film['images']['backdrops'])->take(1),
-                    'video' => collect($film['videos']['results'])
-                        ->where('type' , 'Trailer')
-                        ->sortByDesc('published_at')
-                        ->take(1)
-                ]);
-            });
-        })->take(20);
-    }
 
     public function dayTrends()
     {
@@ -58,6 +41,26 @@ class landingViewModel extends ViewModel
     public function weekTrends()
     {
         return $this->formatMovies($this->weekTrend);
+    }
+
+    public function streamTrailers()
+    {
+        return $this->formatTrailers($this->streaming);
+    }
+
+    public function tvTrailers()
+    {
+        return $this->formatTrailers($this->popularTv);
+    }
+
+    public function rentTrailers()
+    {
+        return $this->formatTrailers($this->rentMovie);
+    }
+
+    public function theaterTrailers()
+    {
+        return $this->formatTrailers($this->theater);
     }
 
     public function streamMovies()
@@ -106,5 +109,58 @@ class landingViewModel extends ViewModel
                     : route('movies.show', $trend['id']),
             ]);
         })->sortByDesc('vote_average')->take(7);
+    }
+
+    private function formatTrailers($trailer)
+    {
+        return collect($trailer['results'])->map(function ($movie) {
+            if (isset($movie['title'])) {
+                return collect($movie['id'])->map(function ($id) {
+                    $film = Http::get('https://api.themoviedb.org/3/movie/' . $id . '?append_to_response=videos,images&api_key=' . env('TMDB_TOKEN'))
+                        ->json();
+                    $backdrops = collect($film['images']['backdrops']);
+                    if ($backdrops->count() > 0){
+                        return collect($film)->merge([
+                            'file_path' => collect($backdrops->map(function ($image) {
+                                    return 'https://www.themoviedb.org/t/p/w355_and_h200_multi_faces' . collect($image['file_path'])->implode('');
+                                })->take(1))->implode(''),
+                            'linkToPage' => route('movies.show', $film['id']),
+                            'video' => collect($film['videos']['results'])
+                                ->map(function ($video){
+                                    return collect($video)->merge([
+                                        'name' => $video['name'] ?? "New Trailer"
+                                    ]);
+                                })
+                                ->where('type', 'Trailer')
+                                ->sortByDesc('published_at')
+                                ->take(1)
+                        ]);
+                    }else{
+                        return false;
+                    }
+                });
+            } else {
+                return collect($movie['id'])->map(function ($id) {
+                    $film = Http::get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=videos,images&api_key=' . env('TMDB_TOKEN'))
+                        ->json();
+                    if (isset($film['poster_path'])) {
+                        return collect($film)->merge([
+                            'title' => $film['name'],
+                            'linkToPage' => route('tv.show', $film['id']),
+                            'file_path' => collect(collect($film['images']['backdrops'])->map(function ($image) {
+                                return 'https://www.themoviedb.org/t/p/w355_and_h200_multi_faces' . collect($image['file_path'])->implode('');
+                            })->take(1))->implode(''),
+                            'video' => collect($film['videos']['results'])
+                                ->where('type', 'Trailer')
+                                ->sortByDesc('published_at')
+                                ->take(1)
+                        ]);
+                    } else {
+                        return null;
+                    }
+                });
+            }
+
+        })->take(10);
     }
 }
